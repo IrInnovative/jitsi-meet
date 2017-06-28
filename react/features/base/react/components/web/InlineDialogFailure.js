@@ -1,5 +1,5 @@
-import React from 'react';
 import AKButton from '@atlaskit/button';
+import React, { Component } from 'react';
 
 import { translate } from '../../../i18n';
 
@@ -11,7 +11,7 @@ declare var interfaceConfig: Object;
  * @param {Object} props - The properties for the inline dialog.
  * @returns {XML}
  */
-class InlineDialogFailure extends React.Component {
+class InlineDialogFailure extends Component {
     /**
      * {@code InlineDialogFailure}'s property types.
      *
@@ -32,7 +32,7 @@ class InlineDialogFailure extends React.Component {
     /**
      * Renders the content of this component.
      *
-     * @returns {XML}
+     * @returns {ReactElement}
      */
     render() {
         const { t } = this.props;
@@ -42,13 +42,13 @@ class InlineDialogFailure extends React.Component {
             = supportLink
                 ? ( // eslint-disable-line no-extra-parens
                     <div className = 'inline-dialog-error-text'>
-                        <span>{ t('inlineDialogFailure.part2') }</span>
+                        <span>`{ t('inlineDialogFailure.supportMsg') } `</span>
                         <span>
                             <a
                                 href = { supportLink }
                                 rel = 'noopener noreferrer'
                                 target = '_blank'>
-                                { t('inlineDialogFailure.part3') }
+                                { t('inlineDialogFailure.support') }
                             </a>
                         </span>
                         <span>.</span>
@@ -59,7 +59,7 @@ class InlineDialogFailure extends React.Component {
         return (
             <div className = 'inline-dialog-error'>
                 <div className = 'inline-dialog-error-text'>
-                    { t('inlineDialogFailure.part1') }
+                    { t('inlineDialogFailure.msg') }
                 </div>
                 { supportLinkElem }
                 <AKButton
