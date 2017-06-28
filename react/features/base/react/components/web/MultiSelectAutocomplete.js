@@ -78,7 +78,7 @@ class MultiSelectAutocomplete extends Component {
             isOpen: false,
 
             /**
-             * The filter value.
+             * The text that filters the query result of the search.
              */
             filterValue: '',
 
@@ -101,7 +101,7 @@ class MultiSelectAutocomplete extends Component {
             /**
              * The list of selected items.
              */
-            selectedItems: [ ...defaultValue ] || []
+            selectedItems: [ ...defaultValue ]
         };
 
         this._onFilterChange = this._onFilterChange.bind(this);
@@ -231,7 +231,7 @@ class MultiSelectAutocomplete extends Component {
     /**
      * Renders the content of this component.
      *
-     * @returns {XML}
+     * @returns {ReactElement}
      */
     render() {
         const shouldFitContainer = this.props.shouldFitContainer || false;
