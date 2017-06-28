@@ -3,10 +3,11 @@ import { Immutable } from 'nuclear-js';
 import { connect } from 'react-redux';
 import Avatar from '@atlaskit/avatar';
 
-import MultiSelectAutocomplete
-    from '../../base/react/components/web/MultiSelectAutocomplete';
+import { getInviteURL } from '../../base/connection';
 import { Dialog } from '../../base/dialog';
 import { translate } from '../../base/i18n';
+import MultiSelectAutocomplete
+    from '../../base/react/components/web/MultiSelectAutocomplete';
 
 import { invitePeople, searchPeople } from '../functions';
 
@@ -23,7 +24,12 @@ class AddPeopleDialog extends Component {
         /**
          * The URL pointing to the service allowing for people invite.
          */
-        _invitePeopleUrl: React.PropTypes.string,
+        _inviteServiceUrl: React.PropTypes.string,
+
+        /**
+         * The url of the conference to invite people to.
+         */
+        _inviteUrl: React.PropTypes.string,
 
         /**
          * The JWT token.
@@ -197,7 +203,8 @@ class AddPeopleDialog extends Component {
             });
 
             invitePeople(
-                this.props._invitePeopleUrl,
+                this.props._inviteServiceUrl,
+                this.props._inviteUrl,
                 this.props._jwt,
                 this.state.inviteItems)
             .then(() => {
@@ -239,11 +246,12 @@ class AddPeopleDialog extends Component {
  * }}
  */
 function _mapStateToProps(state) {
-    const { peopleSearchUrl, invitePeopleUrl } = state['features/base/config'];
+    const { peopleSearchUrl, inviteServiceUrl } = state['features/base/config'];
 
     return {
         _jwt: state['features/jwt'].jwt,
-        _invitePeopleUrl: invitePeopleUrl,
+        _inviteUrl: getInviteURL(state),
+        _inviteServiceUrl: inviteServiceUrl,
         _peopleSearchUrl: peopleSearchUrl
     };
 }
