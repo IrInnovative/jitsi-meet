@@ -1,8 +1,8 @@
-import debounce from 'debounce';
-import React, { Component } from 'react';
 import { MultiSelectStateless } from '@atlaskit/multi-select';
 import AKInlineDialog from '@atlaskit/inline-dialog';
 import Spinner from '@atlaskit/spinner';
+import _debounce from 'lodash/debounce';
+import React, { Component } from 'react';
 
 import InlineDialogFailure from './InlineDialogFailure';
 
@@ -108,7 +108,7 @@ class MultiSelectAutocomplete extends Component {
         this._onFilterChange = this._onFilterChange.bind(this);
         this._onRetry = this._onRetry.bind(this);
         this._onSelectionChange = this._onSelectionChange.bind(this);
-        this._sendQuery = this._sendQuery.bind(this);
+        this._sendQuery = _debounce(this._sendQuery.bind(this), 200);
     }
 
     /**
@@ -132,10 +132,12 @@ class MultiSelectAutocomplete extends Component {
     _onFilterChange(filterValue) {
         this.setState({
             filterValue,
-            isOpen: Boolean(this.state.items.length)
-                && Boolean(filterValue),
+            isOpen: Boolean(this.state.items.length) && Boolean(filterValue),
             items: filterValue ? this.state.items : []
-        }, debounce(this._sendQuery, 200));
+        });
+        if (filterValue) {
+            this._sendQuery(filterValue);
+        }
     }
 
     /**
@@ -145,18 +147,17 @@ class MultiSelectAutocomplete extends Component {
      * @returns {void}
      */
     _onRetry() {
-        debounce(this._sendQuery, 200);
+        this._sendQuery(this.state.filterValue);
     }
 
     /**
      * Sends a query to the resourceClient.
      *
+     * @param {string} filterValue - The string to use for the search.
      * @returns {void}
      */
-    _sendQuery() {
-        const text = this.state.filterValue;
-
-        if (!text) {
+    _sendQuery(filterValue) {
+        if (!filterValue) {
             return;
         }
 
@@ -170,9 +171,9 @@ class MultiSelectAutocomplete extends Component {
             parseResults: results => results
         };
 
-        resourceClient.makeQuery(text)
+        resourceClient.makeQuery(filterValue)
             .then(results => {
-                if (this.state.filterValue !== text) {
+                if (this.state.filterValue !== filterValue) {
                     this.setState({
                         loading: false,
                         error: false
