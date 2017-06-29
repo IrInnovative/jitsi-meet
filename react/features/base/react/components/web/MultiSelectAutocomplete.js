@@ -1,3 +1,4 @@
+import debounce from 'debounce';
 import React, { Component } from 'react';
 import { MultiSelectStateless } from '@atlaskit/multi-select';
 import AKInlineDialog from '@atlaskit/inline-dialog';
@@ -134,7 +135,7 @@ class MultiSelectAutocomplete extends Component {
             isOpen: Boolean(this.state.items.length)
                 && Boolean(filterValue),
             items: filterValue ? this.state.items : []
-        }, this._sendQuery);
+        }, debounce(this._sendQuery, 200));
     }
 
     /**
@@ -144,7 +145,7 @@ class MultiSelectAutocomplete extends Component {
      * @returns {void}
      */
     _onRetry() {
-        this._sendQuery();
+        debounce(this._sendQuery, 200);
     }
 
     /**
