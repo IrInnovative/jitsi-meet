@@ -6,7 +6,7 @@ declare var $: Function;
  * @param {string} serviceUrl - The service to query.
  * @param {string} jwt - The jwt token to pass to the search service.
  * @param {string} text - Text to search.
- * @returns {Function} - The promise created by the request.
+ * @returns {Promise} - The promise created by the request.
  */
 export function searchPeople(serviceUrl, jwt, text) {
     const queryTypes = '["conferenceRooms","user","room"]';
@@ -29,7 +29,7 @@ export function searchPeople(serviceUrl, jwt, text) {
  * @param {string} inviteUrl - The url to the conference.
  * @param {string} jwt - The jwt token to pass to the search service.
  * @param {Immutable.List} inviteItems - The list of items to invite.
- * @returns {Function} - The promise created by the request.
+ * @returns {Promise} - The promise created by the request.
  */
 export function invitePeople(inviteServiceUrl, inviteUrl, jwt, inviteItems) { // eslint-disable-line max-params, max-len
     return new Promise((resolve, reject) => {

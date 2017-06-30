@@ -6,10 +6,7 @@ import { translate } from '../../../i18n';
 declare var interfaceConfig: Object;
 
 /**
- * Inline dialog failure.
- *
- * @param {Object} props - The properties for the inline dialog.
- * @returns {XML}
+ * Inline dialog the represents a failure and allows a retry.
  */
 class InlineDialogFailure extends Component {
     /**
@@ -42,7 +39,7 @@ class InlineDialogFailure extends Component {
             = supportLink
                 ? ( // eslint-disable-line no-extra-parens
                     <div className = 'inline-dialog-error-text'>
-                        <span>`{ t('inlineDialogFailure.supportMsg') } `</span>
+                        <span>{ t('inlineDialogFailure.supportMsg') }</span>
                         <span>
                             <a
                                 href = { supportLink }

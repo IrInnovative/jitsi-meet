@@ -122,7 +122,7 @@ class AddPeopleDialog extends Component {
     /**
      * Renders the content of this component.
      *
-     * @returns {XML}
+     * @returns {ReactElement}
      */
     render() {
         return (
@@ -140,7 +140,7 @@ class AddPeopleDialog extends Component {
     /**
      * Renders the input form.
      *
-     * @returns {XML}
+     * @returns {ReactElement}
      * @private
      */
     _getUserInputForm() {
@@ -192,7 +192,6 @@ class AddPeopleDialog extends Component {
     /**
      * Handles the submit button action.
      *
-     * @param {Object} e - The event notifying us for the submit.
      * @private
      * @returns {void}
      */

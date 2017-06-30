@@ -466,8 +466,8 @@
     },
     "inlineDialogFailure": {
         "msg": "We stumbled a bit.",
-        "supportMsg": "If this keeps happening, reach out to",
+        "retry": "Try again",
         "support": "Support",
-        "retry": "Try again"
+        "supportMsg": "If this keeps happening, reach out to"
     }
 }

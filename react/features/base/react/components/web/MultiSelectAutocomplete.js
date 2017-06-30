@@ -123,6 +123,39 @@ class MultiSelectAutocomplete extends Component {
     }
 
     /**
+     * Renders the content of this component.
+     *
+     * @returns {ReactElement}
+     */
+    render() {
+        const shouldFitContainer = this.props.shouldFitContainer || false;
+        const shouldFocus = this.props.shouldFocus || false;
+        const isDisabled = this.props.isDisabled || false;
+        const placeholder = this.props.placeholder || '';
+        const noMatchesFound = this.props.noMatchesFound || '';
+
+        return (
+            <div>
+                <MultiSelectStateless
+                    filterValue = { this.state.filterValue }
+                    isDisabled = { isDisabled }
+                    isOpen = { this.state.isOpen }
+                    items = { this.state.items }
+                    noMatchesFound = { noMatchesFound }
+                    onFilterChange = { this._onFilterChange }
+                    onRemoved = { this._onSelectionChange }
+                    onSelected = { this._onSelectionChange }
+                    placeholder = { placeholder }
+                    selectedItems = { this.state.selectedItems }
+                    shouldFitContainer = { shouldFitContainer }
+                    shouldFocus = { shouldFocus } />
+                { this._renderLoadingIndicator() }
+                { this._renderError() }
+            </div>
+        );
+    }
+
+    /**
      * Sets the state and sends a query on filter change.
      *
      * @param {string} filterValue - The filter text value.
@@ -148,6 +181,83 @@ class MultiSelectAutocomplete extends Component {
      */
     _onRetry() {
         this._sendQuery(this.state.filterValue);
+    }
+
+    /**
+     * Updates the selected items when a selection event occurs.
+     *
+     * @param {Object} item - The selected item.
+     * @private
+     * @returns {void}
+     */
+    _onSelectionChange(item) {
+        const existing
+            = this.state.selectedItems.find(k => k.value === item.value);
+        let selectedItems = this.state.selectedItems;
+
+        if (existing) {
+            selectedItems = selectedItems.filter(k => k !== existing);
+        } else {
+            selectedItems.push(item);
+        }
+        this.setState({
+            isOpen: false,
+            selectedItems
+        });
+
+        if (this.props.onSelectionChange) {
+            this.props.onSelectionChange(selectedItems);
+        }
+    }
+
+    /**
+     * Renders the error UI.
+     *
+     * @returns {*}
+     */
+    _renderError() {
+        if (!this.state.error) {
+            return null;
+        }
+        const content = ( // eslint-disable-line no-extra-parens
+            <div className = 'autocomplete-error'>
+                <InlineDialogFailure
+                    onRetry = { this._onRetry } />
+            </div>
+        );
+
+        return (
+            <AKInlineDialog
+                content = { content }
+                isOpen = { true } />
+        );
+    }
+
+    /**
+     * Renders the loading indicator.
+     *
+     * @returns {*}
+     */
+    _renderLoadingIndicator() {
+        if (!(this.state.loading
+            && !this.state.items.length
+            && this.state.filterValue.length)) {
+            return null;
+        }
+
+        const content = ( // eslint-disable-line no-extra-parens
+            <div className = 'autocomplete-loading'>
+                <Spinner
+                    isCompleting = { false }
+                    size = 'medium' />
+            </div>
+        );
+
+        return (
+            <AKInlineDialog
+                content = { content }
+                isOpen = { true } />
+        );
     }
 
     /**
@@ -202,117 +312,6 @@ class MultiSelectAutocomplete extends Component {
                 });
             });
     }
-
-    /**
-     * Updates the selected items when a selection event occurs.
-     *
-     * @param {Object} item - The selected item.
-     * @private
-     * @returns {void}
-     */
-    _onSelectionChange(item) {
-        const existing
-            = this.state.selectedItems.find(k => k.value === item.value);
-        let selectedItems = this.state.selectedItems;
-
-        if (existing) {
-            selectedItems = selectedItems.filter(k => k !== existing);
-        } else {
-            selectedItems.push(item);
-        }
-        this.setState({
-            isOpen: false,
-            selectedItems
-        });
-
-        if (this.props.onSelectionChange) {
-            this.props.onSelectionChange(selectedItems);
-        }
-    }
-
-    /**
-     * Renders the content of this component.
-     *
-     * @returns {ReactElement}
-     */
-    render() {
-        const shouldFitContainer = this.props.shouldFitContainer || false;
-        const shouldFocus = this.props.shouldFocus || false;
-        const isDisabled = this.props.isDisabled || false;
-        const placeholder = this.props.placeholder || '';
-        const noMatchesFound = this.props.noMatchesFound || '';
-
-        return (
-            <div>
-                <MultiSelectStateless
-                    filterValue = { this.state.filterValue }
-                    isDisabled = { isDisabled }
-                    isOpen = { this.state.isOpen }
-                    items = { this.state.items }
-                    noMatchesFound = { noMatchesFound }
-                    onFilterChange = { this._onFilterChange }
-                    onRemoved = { this._onSelectionChange }
-                    onSelected = { this._onSelectionChange }
-                    placeholder = { placeholder }
-                    selectedItems = { this.state.selectedItems }
-                    shouldFitContainer = { shouldFitContainer }
-                    shouldFocus = { shouldFocus } />
-                { this._renderLoadingIndicator() }
-                { this._renderError() }
-            </div>
-        );
-    }
-
-    /**
-     * Renders the loading indicator.
-     *
-     * @returns {*}
-     */
-    _renderLoadingIndicator() {
-        if (!(this.state.loading
-            && !this.state.items.length
-            && this.state.filterValue.length)) {
-            return null;
-        }
-
-        const content = ( // eslint-disable-line no-extra-parens
-            <div className = 'autocomplete-loading'>
-                <Spinner
-                    isCompleting = { false }
-                    size = 'medium' />
-            </div>
-        );
-
-        return (
-            <AKInlineDialog
-                content = { content }
-                isOpen = { true } />
-        );
-    }
-
-    /**
-     * Renders the error UI.
-     *
-     * @returns {*}
-     */
-    _renderError() {
-        if (!this.state.error) {
-            return null;
-        }
-        const content = ( // eslint-disable-line no-extra-parens
-            <div className = 'autocomplete-error'>
-                <InlineDialogFailure
-                    onRetry = { this._onRetry } />
-            </div>
-        );
-
-        return (
-            <AKInlineDialog
-                content = { content }
-                isOpen = { true } />
-        );
-    }
-
 }
 
 export default MultiSelectAutocomplete;

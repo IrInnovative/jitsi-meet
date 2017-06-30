@@ -15,17 +15,17 @@ declare var JitsiMeetJS: Object;
  * All toolbar buttons' descriptors.
  */
 const buttons: Object = {
-    add: {
+    addtocall: {
         classNames: [ 'button', 'icon-add' ],
         enabled: true,
-        isDisplayed: () => !APP.store.getState()['features/jwt'].isGuest,
         id: 'toolbar_button_add',
-        tooltipKey: 'toolbar.addPeople',
+        isDisplayed: () => !APP.store.getState()['features/jwt'].isGuest,
         onClick() {
             JitsiMeetJS.analytics.sendEvent('toolbar.add.clicked');
 
             return openAddPeopleDialog();
-        }
+        },
+        tooltipKey: 'toolbar.addPeople'
     },
 
     /**
