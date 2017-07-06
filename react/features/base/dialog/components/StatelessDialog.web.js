@@ -275,6 +275,9 @@ class StatelessDialog extends Component {
         }
 
         if (event.key === 'Enter') {
+            event.preventDefault();
+            event.stopPropagation();
+
             if (this.props.submitDisabled && !this.props.cancelDisabled) {
                 this._onCancel();
             } else if (!this.props.okDisabled) {

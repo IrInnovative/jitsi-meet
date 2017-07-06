@@ -164,6 +164,8 @@ class MultiSelectAutocomplete extends Component {
      */
     _onFilterChange(filterValue) {
         this.setState({
+            // Clean the error if the filterValue is empty.
+            error: this.state.error && Boolean(filterValue),
             filterValue,
             isOpen: Boolean(this.state.items.length) && Boolean(filterValue),
             items: filterValue ? this.state.items : []
